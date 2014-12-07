@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title> Another shorter solution to the Nifty Overlay </title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1> Nifty GUI </h1>
+        <h2>Your Open Source Java OpenGL GUI</h2>
+        <a href="https://github.com/void256/nifty-gui" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+          <h2>Another shorter solution to the Nifty Overlay</h2>
+<p class="meta">13 Sep 2009</p>
+
+<p>Nifty and Slick User Tobse pointed out that you can use the NiftyGameState to create overlays too.</p>
+
+<p>I like his version because it is shorter and much of the details of how the integration with Nifty works (calling render and forwarding input events to Nifty) are hidden from you. However the class NiftyGameState has been designed as a base class for a real Nifty GUI State and was not really planned for overlay rendering.</p>
+
+<p>So I think although both versions work there is still something missing (in both versions). I like the idea of hidding the details on one hand but I'm not sure if using the NiftyGameState is really the way to achieve this.</p>
+
+<p>What do you think?</p>
+
+<p>Click the "Read More" link to see the short version of TestState that Tobse wrote and which is less code than my initial version :)</p>
+
+<p><a id="more"></a><a id="more-96"></a></p>
+
+<p><pre lang="java5">package tests;</p>
+<p>import org.newdawn.slick.<em>;<br />
+import org.newdawn.slick.state.</em>;<br />
+import de.lessvoid.nifty.<em>;<br />
+import de.lessvoid.nifty.effects.EffectEventId;<br />
+import de.lessvoid.nifty.elements.Element;<br />
+import de.lessvoid.nifty.screen.</em>;<br />
+import de.lessvoid.nifty.slick.NiftyGameState;</p>
+<p>&#47;**<br />
+ * This is the original TestState1 from slick tests extended to a nifty gui overlay. This only<br />
+ * implements from ScreenController because we have a quit() onClick action definied in the<br />
+ * nifty xml file that is handled in here to quit the demo.<br />
+ *<br />
+ * @author void<br />
+ *&#47;<br />
+public class TestState2 extends BasicGameState implements ScreenController {<br />
+    public static final int ID = 1;<br />
+    private GameContainer container;<br />
+    private Font font;<br />
+    private Color currentColor;<br />
+    private Nifty nifty;<br />
+    private NiftyGameState niftyGameState;</p>
+<p> @Override<br />
+    public int getID() {<br />
+        return ID;<br />
+    }</p>
+<p> public void init(GameContainer container, StateBasedGame game) throws SlickException {<br />
+        this.container = container;<br />
+        font = new AngelCodeFont(&quot;menu.fnt&quot;, &quot;menu.png&quot;);<br />
+        currentColor = Color.white;<br />
+        niftyGameState = new NiftyGameState(2);<br />
+        niftyGameState.fromXml(&quot;tests&#47;overlay.xml&quot;, this);<br />
+        container.getInput().addListener(niftyGameState);<br />
+        niftyGameState.init(container, game);<br />
+        nifty = niftyGameState.getNifty();<br />
+    }</p>
+<p> public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {<br />
+        g.setFont(font);<br />
+        g.setColor(currentColor);<br />
+        g.drawString(&quot;State Based Game Test&quot;, 100, 100);<br />
+        g.drawString(&quot;1-3 will switch between colors&quot;, 100, 300);<br />
+        g.drawString(&quot;(this is all slick rendering!)&quot;, 100, 400);<br />
+        g.drawString(&quot;and this is more slick text&quot;, 360, 650);<br />
+        g.drawString(&quot;below (!) a nifty-gui overlay&quot;, 360, 700);</p>
+<p>     niftyGameState.render(container, game, g);<br />
+    }</p>
+<p> public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {<br />
+        }</p>
+<p> @Override<br />
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException {<br />
+        niftyGameState.enter(container, game);<br />
+    }</p>
+<p> @Override<br />
+    public void keyReleased(int key, char c) {<br />
+        if (key == Input.KEY<em>1) {<br />
+            currentColor = Color.red;<br />
+            getElement(&quot;red&quot;).startEffect(EffectEventId.onCustom);<br />
+        }<br />
+        if (key == Input.KEY</em>2) {<br />
+            currentColor = Color.green;<br />
+            getElement(&quot;green&quot;).startEffect(EffectEventId.onCustom);<br />
+        }<br />
+        if (key == Input.KEY_3) {<br />
+            currentColor = Color.blue;<br />
+            getElement(&quot;blue&quot;).startEffect(EffectEventId.onCustom);<br />
+        }<br />
+    }</p>
+<p> private Element getElement(final String id) {<br />
+        return nifty.getCurrentScreen().findElementByName(id);<br />
+    }</p>
+<p> public void bind(Nifty nifty, Screen screen) {}</p>
+<p> public void onEndScreen() {}</p>
+<p> public void onStartScreen() {}</p>
+<p> public void quit() {<br />
+        nifty.getCurrentScreen().endScreen(new EndNotify() {</p>
+<p>         public void perform() {<br />
+                container.exit();<br />
+            }<br />
+        });<br />
+    }<br />
+}&lt;&#47;pre&gt;<br />
+void</p></p>
+
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/void256/nifty-gui/archive/gh-pages.zip" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

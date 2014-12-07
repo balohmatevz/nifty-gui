@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title> java.util.logging (jdk14 logging) oddities explained (and fixed) </title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1> Nifty GUI </h1>
+        <h2>Your Open Source Java OpenGL GUI</h2>
+        <a href="https://github.com/void256/nifty-gui" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+          <h2>java.util.logging (jdk14 logging) oddities explained (and fixed)</h2>
+<p class="meta">01 Apr 2012</p>
+
+<p>Usually when you add logging to your application you create a java.util.logging.Logger that has the same name as the class you use the Logger in. Your code might look like this:</p>
+
+<p><pre class="brush:java">package some.test;</p>
+<p>import java.util.logging.Logger;</p>
+<p>public class Main {<br />
+  private static Logger log = Logger.getLogger(Main.class.getName());</p>
+<p>  public static void main(final String[] args) {<br />
+    log.info(&quot;test&quot;);<br />
+  }<br />
+}<br />
+&lt;&#47;pre&gt;</p>
+<p>This works well and you get something like this as the log output:</p>
+<pre class="brush:java">01.04.2012 19:10:39 some.test.Main main<br />
+INFO: test<br />
+&lt;&#47;pre&gt;</p>
+<p>Now we can easily change the configuration of this logger and change the Loglevel. So for instance when we don&#39;t like any logging we can disable logging for this class either using a configuration file or do it directly from code like so:</p>
+<pre class="brush:java">
+Logger.getLogger(&quot;some.test&quot;).setLevel(Level.OFF);&lt;&#47;pre&gt;</p>
+<p>and the class will not log anymore.</p>
+<p>Sometimes doing this in Nifty and using the name &quot;de.lessvoid.nifty&quot; for instance to shut off the logging refused to work. Some classes simply didn&#39;t stop logging at all. What&#39;s going on?</p>
+<p>After a long headache we&#39;ve finally found out!</p>
+<p>Nifty used some special logger names for eventbus and inputevent logging. Both loggers used special names that did not relate to any class because there where several classes that would need to log those events. So a special name, like &quot;NiftyEventBusLog&quot; made sense for me.</p>
+<p>In some places we had code like that:</p>
+<pre class="brush:java">package some.test;</p>
+<p>import java.util.logging.Logger;</p>
+<p>public class Main {<br />
+  private static Logger differentLog = Logger.getLogger(&quot;SpecialLog&quot;);</p>
+<p>  public static void main(final String[] args) {<br />
+    differentLog.info(&quot;test&quot;);<br />
+  }<br />
+}<br />
+&lt;&#47;pre&gt;</p>
+<p>I somehow expected the loggername in the log to be &quot;SpecialLog&quot; since it&#39;s the name of the logger. But in fact we get something else:</p>
+<pre class="brush:java">
+01.04.2012 19:24:41 some.test.Main main<br />
+INFO: test<br />
+&lt;&#47;pre&gt;</p>
+<p>O_o</p>
+<p>The information still shows &quot;some.test.Main&quot; since this is the class that actually logged!</p>
+<p>If you now try to disable logging for this class, like we&#39;ve seen above:</p>
+<pre class="brush:java">
+Logger.getLogger(&quot;some.test&quot;).setLevel(Level.OFF);&lt;&#47;pre&gt;</p>
+<p>YOU WOULD STILL SEE THE LINE IN THE LOG - even though you&#39;ve disabled it (kinda) :-)</p>
+<p>Of course to fix this you would need to disable the &quot;SpecialLog&quot; additionaly to &quot;some.test.Main&quot; but that&#39;s pretty odd since you usually don&#39;t know the exact names of all loggers beforehand.</p>
+<p>So to make a long story short Nifty now (current git) removed all the special loggers and always only uses the logger with the name of the current class. When you now disable a logger you should be pretty sure that you really disable any output with that name ;-)</p>
+<p>void</p>
+<p><strong>EDIT&lt;&#47;strong&gt;</p>
+<p>I just realized that it would be very helpful to give you the actual logger names you need to disable when you still use Nifty 1.3.1:</p>
+<ul>
+<li>&quot;NiftyInputEventHandlingLog&quot;&lt;&#47;li&gt;
+<li>&quot;NiftyEventBusLog&quot;&lt;&#47;li&gt;
+<li>&quot;NiftyImageManager&quot;&lt;&#47;li&gt;<br />
+&lt;&#47;ul&gt;</p></p>
+
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/void256/nifty-gui/archive/gh-pages.zip" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

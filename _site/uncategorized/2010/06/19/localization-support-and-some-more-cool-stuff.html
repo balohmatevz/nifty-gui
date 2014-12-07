@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title> Localization support and some more cool stuff! </title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1> Nifty GUI </h1>
+        <h2>Your Open Source Java OpenGL GUI</h2>
+        <a href="https://github.com/void256/nifty-gui" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+          <h2>Localization support and some more cool stuff!</h2>
+<p class="meta">19 Jun 2010</p>
+
+<p>A <a href="https:&#47;&#47;sourceforge.net&#47;tracker&#47;?func=detail&amp;aid=2907134&amp;group_id=223898&amp;atid=1059825">feature request<&#47;a> made Nifty user <a href="https:&#47;&#47;sourceforge.net&#47;users&#47;lynorics&#47;">lynorics<&#47;a> create a patch that solved the issue and it directly point to solve the <a href="https:&#47;&#47;sourceforge.net&#47;tracker&#47;?func=detail&amp;aid=2948094&amp;group_id=223898&amp;atid=1059825">localization feature request<&#47;a> too :)</p>
+
+<p>Every attribute of every Nifty element can now contain a special markup <strong>"${...}"<&#47;strong> that gets replaced with something else when the xml is loaded.</p>
+
+<p>Example:</p>
+
+<p><pre class="brush:xml"><text text="your home directory: ${ENV.HOME}" &#47;>&lt;&#47;pre&gt;<br />
+The &quot;${ENV.HOME}&quot; will be replaced with your $HOME environment variable! :D</p>
+<p>You have the following options now to use this new feature:</p>
+<ul>
+<li><strong>${id.key}&lt;&#47;strong&gt; lookup resource bundle with &quot;id&quot; and request &quot;key&quot; from it. This is explained in more detail below.&lt;&#47;li&gt;
+<li><strong>${ENV.key}&lt;&#47;strong&gt; lookup &quot;key&quot; in the environment variables (System.getEnv()) and replace ${ENV.key} with the value received.&lt;&#47;li&gt;
+<li><strong>${PROP.key}&lt;&#47;strong&gt; lookup &quot;key&quot; in the new Nifty.setGlobalProperties(Properties) properties or if the properties are not set this will use System.getProperties() to lookup &quot;key&quot;&lt;&#47;li&gt;
+<li><strong>${CALL.method()}&lt;&#47;strong&gt; call method() at the current ScreenController and it is replaced with the value that method() returns. method() should return a String in this case.&lt;&#47;li&gt;<br />
+&lt;&#47;ul&gt;<br />
+If for some reason the replacement does not work out then nothing is replaced and you&#39;ll get the original ${...} String back.</p>
+<p><strong>Localization Details&lt;&#47;strong&gt;</p>
+<p>Currently Nifty Localization is using standard Property file based Resourcebundles. This simply means you can create a property file containing keys that are referenced from the xml files.</p>
+<p>Example:</p>
+<pre>dialog.properties:<br />
+hello = Hello World in Default Language</p>
+<p>dialog<em>de.properties:<br />
+hello = Hallo Welt in Deutsch</p>
+<p>dialog</em>en.properties:<br />
+hello = hello world in english&lt;&#47;pre&gt;<br />
+Once you have created these files you need to register the resourceBundle &quot;dialog&quot; with Nifty so that Nifty knows that it exists. You can do that with the new &quot;resourceBundle&quot; tag:</p>
+<pre class="brush:xml"><resourceBundle id="dialog" filename="src&#47;main&#47;resources&#47;dialog" &#47;>&lt;&#47;pre&gt;</p>
+<pre lang="xml">&lt;&#47;pre&gt;</p>
+<p>Now that Nifty knows about your resourceBundle you can access it with the method mentioned above:</p>
+<pre class="brush:xml"><text text="${dialog.hello}" &#47;>&lt;&#47;pre&gt;</p>
+<pre lang="xml">&lt;&#47;pre&gt;<br />
+Now Nifty will use the current set default locale to access the ResourceBundle with the id &quot;dialog&quot; and looks up the value for &quot;hello&quot;. If you don&#39;t like that Nifty uses the default Locale you can set the Locale that Nifty should use with the &quot;nifty.setLocale(Locale)&quot; method.</p>
+<p>Nifty stuff and Kudos goes out to lynorics! :D</p>
+<p>void</p></p>
+
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/void256/nifty-gui/archive/gh-pages.zip" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

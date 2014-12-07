@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title> Prefer composition&#47;delegation over inheritance is a good thing! </title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1> Nifty GUI </h1>
+        <h2>Your Open Source Java OpenGL GUI</h2>
+        <a href="https://github.com/void256/nifty-gui" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+          <h2>Prefer composition&#47;delegation over inheritance is a good thing!</h2>
+<p class="meta">29 Dec 2007</p>
+
+<p>I am refactoring Nifty-GUI's internal workings. Trying to make it less inheritance dependent.</p>
+
+<p>To manage all the Elements (Panels, Images, Text and so on) I have quickly and with not much thought introduced a Element class hierarchy as shown in figure 1.</p>
+
+<p><img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;remove-inheritance-before.png" alt="figure 1: reasonable (?) class hierachie" border="0" height="128" hspace="2" vspace="2" width="141" &#47;></p>
+
+<p><strong>figure 1: reasonable (?) class hierachie <&#47;strong></p>
+
+<p>Well, each Element has an "void abstract render()" method to render itself. This method is overwritten in the subclasses. This is reasonable because the steps you'll need to render an Image are probably different to f.i. a TextElement. You have seen this kind of solution a million times before. So why should this be a bad thing?</p>
+
+<p><a id="more"></a><a id="more-6"></a>Alex Miller points in his Blog the drawbacks of the Template Method out (see his very cool entry here: <a href="http:&#47;&#47;tech.puredanger.com&#47;2007&#47;07&#47;03&#47;pattern-hate-template&#47;" title="Alex Miller - Patters I Hate #2: Template Pattern">Alex Miller - Pattern I Hate #2: Template Method<&#47;a>). And although this is not really a Template Pattern in it's purest form it sure has most of the drawbacks as Alex points out, for instance:</p>
+
+<p><ul>
+<li><strong>Difficult to compose functionality:&lt;&#47;strong&gt; Say I want to change more behaviour not only rendering. Maybe layout the element, mouse events, key events and so on. If I&#39;d introduce for every behaviour a new (abstract) method that is supposed to be overwritten in a sub class things get messy and complicated pretty soon.&lt;&#47;li&gt;<br />
+&lt;&#47;ul&gt;<br />
+I noticed that the only difference my Elements had until now, was the way they rendered themself on the screen. As I am not really a friend of inheritance at all ;) I ask myself: Why not remove the whole Element hierarchy?</p>
+<p>And it is easily possible. I can extract the functionality of &quot;rendering an element&quot; into an Interface. I call this an &quot;ElementRenderer&quot; Interface with only one Method: &quot;render&quot;:</p>
+<pre>public interface ElementRenderer {&lt;&#47;pre&gt;</p>
+<pre>  &#47;**&lt;&#47;pre&gt;</p>
+<pre>   * render the element.&lt;&#47;pre&gt;</p>
+<pre>   * @param w the Element&lt;&#47;pre&gt;</p>
+<pre>   * @param r the RenderDevice for output.&lt;&#47;pre&gt;</p>
+<pre>   *&#47;&lt;&#47;pre&gt;</p>
+<pre>  void render(Element w, RenderDevice r);&lt;&#47;pre&gt;</p>
+<pre>}&lt;&#47;pre&gt;<br />
+Doing it this way, I can remove the whole Element hierarchy. I am left with a single class, the Element class and I can &quot;inject&quot; different behaviour into this class using different &quot;ElementRenderer&quot; implementations. One way to achieve this is &quot;constructor injection&quot; and simply give the Element constructor an additional parameter, the ElementRenderer this Element should use.</p>
+<pre> public Element(final ElementRenderer newElementRenderer) {  ... }&lt;&#47;pre&gt;<br />
+So implementing the ElementRenderer is easy and I don&#39;t need to care about the whole Element hierachy anymore. Furthermore I noticed that at the moment some elements can share the same ElementRenderer. For instance my MenuItems and Text-Elements really use the same TextRenderer implementation!</p>
+<p>You can see in figure 2 the removed hierachy and the new ElementRenderer interface I&#39;ve come up with as well as the first three implementations.</p>
+<p><img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;remove-inheritance-after.png" alt="figure 2: inject some interface is better" border="0" height="128" hspace="2" vspace="2" width="355" &#47;></p>
+<p><strong>figure 2: inject some interface is better&lt;&#47;strong&gt;</p>
+<p>There is one drawback however. All state information that an ElementRenderer needs to render an Element have to be somehow public accessible. In my case that was not much of a problem, because the Element already had a Postition on Screen. All other Information is part of the Renderer. For instance to render an Image the filename of the image is part of the ImageRenderer and not of the Element (because it has something to do with the visual representation of the element, so there&#39;s no need to &quot;polute&quot; the Element class with that information).</p>
+<p>I&#39;m pretty happy now :)</p>
+<p>Reference:</p>
+<ul>
+<li><a href="http:&#47;&#47;www.javaworld.com&#47;javaworld&#47;jw-08-2003&#47;jw-0801-toolbox.html" title="Why extends is evil">Java World article: Why extends is evil&lt;&#47;a&gt;&lt;&#47;li&gt;
+<li><a href="http:&#47;&#47;tech.puredanger.com&#47;2007&#47;07&#47;03&#47;pattern-hate-template&#47;" title="Alex Miller - Patters I Hate #2: Template Pattern">Alex Miller Blog: Pattern I Hate #2: Template Method)&lt;&#47;a&gt;&lt;&#47;li&gt;<br />
+&lt;&#47;ul&gt;<br />
+<a href="http:&#47;&#47;www.javaworld.com&#47;javaworld&#47;jw-08-2003&#47;jw-0801-toolbox.html" title="Why extends is evil"><br />
+&lt;&#47;a&gt;</p></p>
+
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/void256/nifty-gui/archive/gh-pages.zip" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

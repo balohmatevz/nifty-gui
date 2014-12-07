@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title> Nifty 1.3 has been released </title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1> Nifty GUI </h1>
+        <h2>Your Open Source Java OpenGL GUI</h2>
+        <a href="https://github.com/void256/nifty-gui" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+          <h2>Nifty 1.3 has been released</h2>
+<p class="meta">26 Jun 2011</p>
+
+<p>Nifty 1.3 is done! Finally! ;)</p>
+
+<p><strong>Get it here:<&#47;strong>
+<ul>
+<li><a href="https:&#47;&#47;sourceforge.net&#47;projects&#47;nifty-gui&#47;files&#47;nifty-gui&#47;1.3&#47;">Nifty 1.3 Download Folder at sf.net<&#47;a><&#47;li>
+<li><a href="http:&#47;&#47;nifty-gui.sourceforge.net&#47;projects&#47;1.3&#47;">Nifty 1.3 Maven Projects Page (You can browse the JavaDoc online here)<&#47;a><&#47;li><br />
+<&#47;ul></p>
+
+<p>When you're using Maven, you can simply add our sf.net Nifty Maven Repo to your pom.xml:</p>
+
+<p><pre class="brush:xml">  <repositories><br />
+    <repository><br />
+      <id>nifty-maven-repo.sourceforge.net&lt;&#47;id&gt;<br />
+      <url>http:&#47;&#47;nifty-gui.sourceforge.net&#47;nifty-maven-repo&lt;&#47;url&gt;<br />
+    &lt;&#47;repository&gt;<br />
+  &lt;&#47;repositories&gt;&lt;&#47;pre&gt;</p>
+<p>and then you can add this dependency:</p>
+<pre class="brush:xml">    <dependency><br />
+      <groupId>lessvoid&lt;&#47;groupId&gt;<br />
+      <artifactId>nifty&lt;&#47;artifactId&gt;<br />
+      <version>1.3&lt;&#47;version&gt;<br />
+    &lt;&#47;dependency&gt;&lt;&#47;pre&gt;</p>
+<p>Here are some quick informations about 1.3.</p>
+<p><strong>Lots of Changes&lt;&#47;strong&gt;</p>
+<p>There have been well <a href="http:&#47;&#47;sourceforge.net&#47;projects&#47;nifty-gui&#47;files&#47;nifty-gui&#47;1.3&#47;nifty-1.3-changelog.txt&#47;download">over 200 changes&lt;&#47;a&gt;! Nifty 1.3 fixes a lot of bugs and adds a lot of new features.</p>
+<p>To summarize Nifty 1.3 you could say this is the &quot;controls&quot; release of Nifty. Nifty 1.3 was mainly targeted on improving and extending the nifty-default-controls project. The existing controls have been revised&#47;rewritten and lots of new controls have been added. You can find an overview and details about the <a href="http:&#47;&#47;sourceforge.net&#47;apps&#47;mediawiki&#47;nifty-gui&#47;index.php?title=Nifty_Standard_Controls_(Nifty_1.3)">new controls in the Nifty wiki&lt;&#47;a&gt;.</p>
+<p>If you&#39;ve used controls with Nifty 1.2 then you&#39;ll need to update your projects since the 1.3 controls are not backward compatible with the old ones :&#47; Well, the XML part is still working the same but interacting with the controls from Java has changed.</p>
+<p>Besides this most of the Nifty core elements (Panel, Image, Text) should work as before. The only difference is that the label element has now been removed and replaced by a label control. So when you&#39;ve used labels before you need to change them as well. This was described before in <a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;archives&#47;241">a former blog post&lt;&#47;a&gt; too.</p>
+<p><strong>JavaBuilder&lt;&#47;strong&gt;</p>
+<p>Another new feature is the Java Builder pattern that you can use to create GUIs from Java without any XML at all. This feature was <a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;archives&#47;179">described in a former blog post&lt;&#47;a&gt; and has now been extended to work with all of the new controls and with the build-in core elements alike.</p>
+<p><strong>And a new Demo of course&lt;&#47;strong&gt;</p>
+<p>And here is the <a href="http:&#47;&#47;nifty-gui.sourceforge.net&#47;webstart&#47;nifty-default-controls-examples-1.3.jnlp">Nifty 1.3 controls demo&lt;&#47;a&gt;:</p>
+<p><a href="http:&#47;&#47;nifty-gui.sourceforge.net&#47;webstart&#47;nifty-default-controls-examples-1.3.jnlp"><img src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;wp-content&#47;2011&#47;06&#47;Bildschirmfoto-2011-06-26-um-22.56.39-1024x806.png" alt="" title="Nifty 1.3 Controls Demo" width="512" height="403" class="aligncenter size-large wp-image-289" &#47;>&lt;&#47;a&gt;</p>
+<p>If you&#39;re unable to run the demo above, you can watch the video instead:</p>
+<p><iframe src="http:&#47;&#47;player.vimeo.com&#47;video&#47;25637085?color=FF7700" width="640" height="480" frameborder="0">&lt;&#47;iframe&gt;
+<p><a href="http:&#47;&#47;vimeo.com&#47;25637085">Nifty 1.3 Controls Example&#47;Demonstration&lt;&#47;a&gt; from <a href="http:&#47;&#47;vimeo.com&#47;user1070526">void&lt;&#47;a&gt; on <a href="http:&#47;&#47;vimeo.com">Vimeo&lt;&#47;a&gt;.&lt;&#47;p&gt;</p>
+<p>More in future blogs posts...<br />
+void</p>
+<p>PS: Nifty 1.3 will put the support for the nifty-style-grey on hold for some time. This means that this alternative style is currently not updated to be compatible with 1.3. This is just because of lack of time. We might eventually come back to that style later or if we find a maintainer for that style. Interessted? Contact me! :)</p></p>
+
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/void256/nifty-gui/archive/gh-pages.zip" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>

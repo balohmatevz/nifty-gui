@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title> Create your own Nifty Panel Styles - it's easy! :D </title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1> Nifty GUI </h1>
+        <h2>Your Open Source Java OpenGL GUI</h2>
+        <a href="https://github.com/void256/nifty-gui" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+          <h2>Create your own Nifty Panel Styles - it's easy! :D</h2>
+<p class="meta">08 Nov 2008</p>
+
+<p>To customize and extend the default nifty styles is easy. In this example you add your own panel style :)</p>
+
+<p><strong>Default Styles<&#47;strong><br />
+Nifty default styles need to be included using the <useStyle> tag:</p>
+
+<p><pre lang="xml"> &lt;!-- include the default styles--&gt;&lt;&#47;pre&gt;<br />
+To actual use this Style for a panel you use the &quot;style&quot; Attribute in the
+<panel> tag:</p>
+<pre lang="xml"> &lt;!-- panel with &quot;nifty-panel&quot; style --&gt;&lt;&#47;pre&gt;<br />
+When you&#39;re using the two (!) lines you&#39;ll get the well known default &quot;yellow, red, black&quot; colored panel:</p>
+<p>[caption id=&quot;&quot; align=&quot;aligncenter&quot; width=&quot;256&quot; caption=&quot;default panel style&quot;]<a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;custom-panels-default-panel.png"><img title="default panel style" src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;custom-panels-default-panel-thumb.png" alt="default panel style" width="256" height="161" &#47;>&lt;&#47;a&gt;[&#47;caption]</p>
+<p><a id="more"></a><a id="more-25"></a><br />
+<strong>Note&lt;&#47;strong&gt;<br />
+The &quot;nifty-default-styles.xml&quot; was until Version 0.0.4 a part of &quot;nifty.jar&quot;. Starting with Version 0.0.5 the default styles will be a part of the seperate &quot;nifty-default-styles.jar&quot;.</p>
+<p><strong>The Default &quot;nifty-panel&quot; Style&lt;&#47;strong&gt;<br />
+Here is the complete style definition for the &quot;nifty-panel&quot; style:</p>
+<pre lang="xml">&lt;!-- style for a nifty panel --&gt;<br />
+&lt;!--<br />
+  <attributes<br />
+    backgroundImage=&quot;dialog.png&quot;<br />
+    imageMode=&quot;resize:32,32,32,32,32,32,32,168,32,32,32,32&quot; &#47;&gt;<br />
+--&gt;&lt;&#47;pre&gt;<br />
+Not really complicated, eh? :) Besides the funny numbers of course, but we get to those in a minute :)</p>
+<p>The &quot;nifty-panel&quot; Style only consists of a background image named &quot;dialog.png&quot;. This image is a part of &quot;nifty-default-styles.jar&quot; and looks like this:</p>
+<p>[caption id=&quot;&quot; align=&quot;aligncenter&quot; width=&quot;96&quot; caption=&quot;dialog.png&quot;]<a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;dialog.png"><img title="dialog.png" src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;dialog.png" alt="dialog" width="96" height="232" &#47;>&lt;&#47;a&gt;[&#47;caption]</p>
+<p>If you would just use a fixed sized image as the background for your panel you can skip the &quot;imageMode&quot; attribute. But if you need to resize your panel later the default behavior would stretch the image. For some images that could work but when you use rounded edges you would get bad streching like in this example:</p>
+<p>[caption id=&quot;&quot; align=&quot;aligncenter&quot; width=&quot;48&quot; caption=&quot;bad stretching&quot;]<img title="bad stretching" src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;dialog-stretched.png" alt="bad stretching" width="48" height="110" &#47;>[&#47;caption]</p>
+<p>So to kinda work around this limitation you can add the &quot;imageMode&quot; attribute to give Nifty a hint where stretching is possible and where the proportions need to be kept. The &quot;imageMode&quot; Attribute will take 12 arguments:<br />
+<code>w1,w2,w3,h1,w4,w5,w6,h2,w7,w8,w9,h3&lt;&#47;code&gt;<br />
+where &quot;w&quot; means &quot;width&quot; and &quot;h&quot; means &quot;height&quot;. Here is an example:</p>
+<p>[caption id=&quot;&quot; align=&quot;aligncenter&quot; width=&quot;96&quot; caption=&quot;stretching&quot;]<img title="stretching" src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;dialog-sizeable.png" alt="stretching" width="96" height="232" &#47;>[&#47;caption]</p>
+<p>Nifty will stretch only the subimages w2, w5 and w8 horizontally when your panel needs to be stretched horizontal and it will change the height of parts w4, w5 and w6 when vertical stretching occurs. All other subimages will stay unchanged and this way we can keep the round edges.</p>
+<p><strong>Finally your own Style&lt;&#47;strong&gt;<br />
+I&#39;ve made a half transparent Image:</p>
+<p>[caption id=&quot;&quot; align=&quot;aligncenter&quot; width=&quot;128&quot; caption=&quot;custom panel picture&quot;]<img title="custom panel picture" src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;custom-panel.png" alt="custom panel picture" width="128" height="128" &#47;>[&#47;caption]</p>
+<p>Making this into a custom style is pretty easy. You just need to add the image to your resources so that Nifty can find it and you add this to your xml:</p>
+<pre lang="xml">&lt;!--<br />
+ style for a custom panel --&gt;</p>
+<p>--&gt;&lt;&#47;pre&gt;<br />
+And thats it :)</p>
+<p>Now you just use this Style in your panel and you get a resizable custom panel (Here we have two overlapping panels to show of the transparency too):</p>
+<p>[caption id=&quot;&quot; align=&quot;aligncenter&quot; width=&quot;256&quot; caption=&quot;custom panel picture&quot;]<a href="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;custom-panels-custom-panel.png"><img title="custom panel picture" src="http:&#47;&#47;nifty-gui.lessvoid.com&#47;images&#47;custom-panels-changed-panel-thumb.png" alt="custom panel picture" width="256" height="161" &#47;>&lt;&#47;a&gt;[&#47;caption]</p>
+<p>Have Fun :D</p></p>
+
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/void256/nifty-gui/archive/gh-pages.zip" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  </body>
+</html>
